@@ -1,0 +1,125 @@
+
+
+body {
+    background: url('your-background-image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-custom {
+    margin-right: 10px;
+    background-color: rgb(102, 174, 216);
+    color: antiquewhite;
+    padding: 10px 20px;
+    border-radius: 18px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: rgb(87, 79, 141);
+    border-color: #256097;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(33, 3, 82, 0.747);
+}
+
+@media (max-width: 768px) {
+    .btn-custom {
+        padding: 5% 8%;
+    }
+}
+
+.modal-content {
+    background-color: #fff;
+    border-bottom-left-radius: 35px;
+    border-bottom-right-radius: 35px;
+    border-top-right-radius: 35px;
+    border-top-left-radius: 35px;
+}
+
+.modal-header {
+    color: #fff;
+    border-top-right-radius: 35px;
+    border-top-left-radius: 35px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.close {
+    color: #ffffff;
+}
+
+.close:focus {
+    outline: none;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.forgot-password {
+    text-align:left;
+}
+
+.forgot-password a {
+    cursor: pointer;
+}
+
+.login a {
+    cursor: pointer;
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-message {
+    margin-bottom: 15px;
+}
+
+.chat-message p {
+    margin: 0;
+}
+
+.user-message {
+    text-align: right;
+}
+
+.other-message {
+    text-align: left;
+}
+
+.logo-container {
+    text-align: center;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.logo-container img {
+    max-width: 50%;
+    max-height: 50%;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    /* mix-blend-mode: color-burn; */
+}
+
+.slogan {
+    font-size: 1.5rem;
+}

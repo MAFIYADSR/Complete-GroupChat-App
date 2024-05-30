@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meetme</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- jQuery (load it before Bootstrap JS) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS (optional) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Bootstrap JS (load it after jQuery) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- socket io  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"
+        integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../public/css/ezchat.css">
+
+
+</head>
+
+<body class="bg-gradient-to-r from-blue-100 via-indigo-300 to-indigo-600">
+
+    <nav>
+        <div class="logo">
+            <img src="../public/images/meetme.png" alt="logo.png">
+            <h1>ENJOY MEETME</h1>
+        </div>
+        <button class="logout-btn" onclick="logout()"><b>Logout</b></button>
+
+    </nav>
+
+    <div id="containerWrapper">
+        <div id="groupsContainer">
+            <div class="create-group-btn" onclick="fetchMembers()"><b>CREATE GROUP</b></div>
+
+
+            <!-- Container for dynamically created groups -->
+            <div id="dynamicGroupsContainer"></div>
+        </div>
+
+        <div id="chatContainer">
+            <!-- Chat messages container -->
+        </div>
+    </div>
+
+    <div class="send">
+        <div class="send-container">
+            <input type="file" id="fileInput" style="display:none;">
+            <button onclick="document.getElementById('fileInput').click();" class="btn"><b>Select a file</b></button>
+            <form class="send-container" id="send-form" onsubmit="saveMessage(event)">
+                <input type="text" name="mssgInput" id="mssgInput" required>
+                <input type="hidden" name="groupId" id="groupId">
+                <button type="submit" class="btn"><b>Send</b></button>
+            </form>
+        </div>
+
+    </div>
+
+
+    <!--Crete Group Modal-->
+    <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-gradient-to-r from-blue-100 via-indigo-300 to-indigo-600">
+
+                <div class="modal-header bg-cyan-400">
+                    <h1 class="modal-title" id="createGroupHeader"><b>CREATE A GROUP</b></h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body ">
+                    <form onsubmit="createGroup(event)" method="post" id="createGroupForm">
+                        <div class="py-2 mb-3">
+                            <div class="mb-3 flex items-center">
+                                <label for="groupName" class="flex-none w-24 text-lg text-black font-normal">Group
+                                    Name:</label>
+                                <div class="flex-grow">
+                                    <input type="text" required id="groupName" name="groupName"
+                                        class="w-full p-2 border border-blue-500 focus:outline-none focus:ring focus:border-blue-300 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="members" class="col-form-label">Add Members:</label>
+                            <!-- <input type="text" class="form-control" name="search_bar" placeholder="Search..." id="search_bar"> -->
+
+                            <div class="card mt-2">
+                                <ul class="list-group overflow-y-auto" id="membersList" style="max-height: 30vh;">
+
+                                    <!-- Memebers to add goes here dynamically -->
+
+                                </ul>
+                            </div>
+
+                        </div>
+                        <button type="submit"
+                            class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded-md absolute bottom-4 right-4">Create
+                            Group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--Edit Group Details Modal-->
+    <div class="modal fade" id="editGroup" tabindex="-1" role="dialog" aria-labelledby="editGroupModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-gradient-to-br from-purple-200 via-purple-400 to-purple-600">
+
+                <div class="modal-header bg-cyan-400">
+                    <h1 class="modal-title" id="createGroupHeader"><b>Edit Group Details</b></h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body ">
+                    <form onsubmit="editGroupDetails(event)" method="post" id="editGroupForm">
+                        <div class="py-2 mb-3">
+                            <div class="mb-3 flex items-center">
+                                <label for="editGroupName" class="flex-none w-24 text-lg text-black font-normal">Group
+                                    Name:</label>
+                                <div class="flex-grow">
+                                    <input type="hidden" id="editGroupId" name="editGroupId">
+                                    <input type="text" required id="editGroupName" name="editGroupName"
+                                    class="w-full p-2 border border-blue-500 focus:outline-none focus:ring
+                                    focus:border-blue-300 focus:ring-opacity-50 transition duration-300 ease-in-out
+                                    transform hover:scale-105">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <label for="members" class="col-form-label"><b>Edit Members:</b></label>
+                            <div class="card mt-2">
+                                <ul class="list-group overflow-y-auto" id="editMembersList" style="max-height: 30vh;">
+                                    <!-- Memebers of the respective group goes here dynamically -->
+                                </ul>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-2 rounded-md absolute bottom-4 right-4">
+                            Edit Group</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function handleFileChange(event) {
+            const fileInput = event.target;
+            const selectedFile = fileInput.files[0];
+
+            // Handle the selected file, you might want to upload it or process it in some way
+            console.log("Selected File:", selectedFile.name);
+
+            // Remove the "required" attribute from the text input
+            document.getElementById('mssgInput').removeAttribute('required');
+        }
+    </script>
+
+    <script src="../public/js/meetme.js"></script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Google cdn jquary full version -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+    <!-- Tailwind css -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+
+    <!-- Bootstrap CSS (optional) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../public/css/index.css">
+
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 via-indigo-300 to-indigo-600  flex justify-center items-center h-screen">
+    <div class="w-full fixed top-0 p-4 flex flex-wrap justify-between md:justify-end items-center">
+        <button class="btn btn-custom mb-2 md:mb-0 md:mr-2 text-sm md:text-base lg:text-lg">
+            <b class="text-white">Home</b>
+        </button>
+        <button class="btn btn-custom mb-2 md:mb-0 text-sm md:text-base lg:text-lg">
+            <b class="text-white">About</b>
+        </button>
+        <button class="btn btn-custom mb-2 md:mb-0 md:mr-2 text-sm md:text-base lg:text-lg" data-toggle="modal"
+            data-target="#signupModal">
+            <b class="text-white">Sign Up</b>
+        </button>
+        <button class="btn btn-custom mb-2 md:mb-0 md:mr-2 text-sm md:text-base lg:text-lg" data-toggle="modal"
+            data-target="#loginModal">
+            <b class="text-white">Login</b>
+        </button>
+
+    </div>
+
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-gradient-to-br from-purple-200 to-purple-600">
+                    <h3 class="modal-title" id="signupModalLabel">Sign Up</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form onsubmit="signUp(event)" method="post" id="signupForm">
+                        <div class="py-2">
+                            <div class="mb-4">
+                                <label for="username" class="block text-lg text-black font-normal">Username:</label>
+                                <input type="text" id="username" name="username"
+                                    class="mt-1 block w-full rounded-md shadow-sm border-blue-500 bg-gray-200 focus:outline-none focus:ring focus:border-blue-300 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="signupEmail" class="block text-lg text-black font-normal">Email:</label>
+                                <input type="email" required id="signupEmail" name="signupEmail"
+                                    class="mt-1 block w-full rounded-md shadow-sm border-blue-500 bg-gray-200 focus:outline-none focus:ring focus:border-blue-300 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="signupPhone" class="block text-lg text-black font-normal">Phone
+                                    Number:</label>
+                                <input type="tel" required id="signupPhone" name="signupPhone"
+                                    class="mt-1 block w-full rounded-md shadow-sm border-blue-500 bg-gray-200 focus:outline-none focus:ring focus:border-blue-500 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="signupPassword"
+                                    class="block text-lg text-black font-normal">Password:</label>
+                                <input type="password" required id="signupPassword" name="signupPassword"
+                                    class="mt-1 block w-full rounded-md shadow-sm border-blue-500 bg-gray-200 focus:outline-none focus:ring focus:border-blue-500 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-green-300 to-indigo-600 text-white font-semibold p-3 rounded-md hover:bg-gradient-to-r hover:from-green-600 hover:to-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-200">Sign
+                            Up</button>
+                        <p class="mt-4 text-black login">Already have an account?
+                            <a style="color: #4299E1; text-decoration: none;"
+                                onmouseover="this.style.textDecoration='underline';"
+                                onmouseout="this.style.textDecoration='none';" onclick="showLoginModal()">Login here</a>
+                        </p>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-gradient-to-br from-purple-200 to-purple-600">
+                    <h3 class="modal-title" id="loginModalLabel">Login</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form onsubmit="login(event)" class="space-y-4" id="loginForm">
+                        <div class="relative">
+                            <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your Email"
+                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                        </div>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" name="loginPassword"
+                                placeholder="Enter your Password" required
+                                class="mt-1 block w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-green-300 to-indigo-600 text-white font-semibold p-3 rounded-md hover:bg-gradient-to-r hover:from-green-600 hover:to-indigo-700 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-200">
+                            Sign in
+                        </button>
+                        <div class="text-blue-500 hover:underline hover:text-blue-950 form-group forgot-password ">
+                            <a onclick="showForgotPassword()">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+     <!-- Forgot Password Modal -->
+     <div class="modal fade custom-modal" id="forgotPasswordModal" tabindex="-1" role="dialog"
+     aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content">
+
+             <!-- Modal Header -->
+             <div class="modal-header bg-gradient-to-br from-red-400 via-pink-400 to-pink-100">
+                 <h3 class="modal-title text-white" id="forgotPasswordModalLabel">Forgot Password</h3>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+
+             </div>
+
+             <!-- Modal Body -->
+             <div class="modal-body">
+                 <form id="resetPasswordForm" class="space-y-4">
+                     <div class="relative">
+                         <input type="email" id="registeredEmail" name="email" placeholder="Enter your Email"
+                             required
+                             class="mt-1 block w-full rounded-md shadow-sm border-gray-300 bg-gray-100 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 pl-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
+                     </div>
+                     <button type="submit"
+                         class=" bg-gradient-to-r from-red-400 to-pink-200 text-zinc-300 font-semibold p-3 rounded-md hover:bg-gradient-to-r hover:from-red-300 hover:to-red-600 focus:outline-none focus:ring focus:ring-offset-2 focus:ring-indigo-200">
+                         Reset Password
+                     </button>
+                 </form>
+             </div>
+
+         </div>
+     </div>
+ </div>
+
+
+
+     <!-- Chat Application Content -->
+     <div class="logo-container text-white text-center">
+        <!-- <img src="../public/images/meetme.png" alt="meetme Logo" class="max-w-full max-h-full mx-auto mb-4"> -->
+        <img src="../public/images/meetme.png" alt="meetme Logo" class="max-w-full max-h-full mx-auto mb-4">
+
+        <h1 class="slogan text-lg"><b>MEETING WITH PEOPLE IS NOW EASY</b></h1>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <!-- Google cdn min slim version -->
+    <!-- <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    <script defer src="../public/js/index.js"></script>
+
+
+    
+</body>
+</html>
